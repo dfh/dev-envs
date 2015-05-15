@@ -1,0 +1,52 @@
+* Local development environments
+
+Scripts to set up local development environments (envs) in VirtualBox.
+
+Not totally automated. But it fills my needs well enough and adds no
+extra abstractions or dependencies.
+
+I run separate envs for each project, trading disk space for
+flexibility and robustness.
+
+All envs allow SSH login for user/password =root/root= and
+=admin/admin=. User =admin= also accepts passwordless logins using the
+=generic-vbox-dev-login= ssh key. More details follow.
+
+** Generic instructions to create and bootstrap an env
+
+Create and configure VirtualBox guest:
+
+- Linux, Debian (64 bit).
+- 512+ MB RAM, 4+ GB HDD -- varies depending on what is to be run in
+  the env, see ={env}/README.org= if exists.
+- Add host-only network adapter as eth1 (2 adapters in total, one NAT
+  and one host-only).
+- Mount installation media and install Debian 7 (Wheezy).
+- Set user/pass: =root/root=, =dev/dev=.
+- Install SSH + base system.
+- Optional: remove user dev/dev: =userdel dev && rm -rf /home/dev=.
+- Add to /etc/network/interfaces:
+  - =allow-hotplug eth1=
+  - =iface eth1 inet dhcp=
+- Set up shared folder named =shared-folder= in VirtualBox. Permanent.
+  Not auto-mount.
+
+Configure host:
+
+- Add env hostname, by convention ={env}-dev=, to host =/etc/hosts=.
+
+Finally, bootstrap:
+
+- Run =./bootstrap root@{hostname}=.
+
+You can now login as =admin=, using the =generic-vbox-dev-login= key.
+For passwordless logins, copy the key to host =~/.ssh/= and add to
+host =~/.ssh/config=:
+
+#+BEGIN_SRC
+Host {hostname}
+     IdentityFile=~/.ssh/generic-vbox-dev-login
+     User admin
+#+END_SRC
+
+Then, to install system, run =./deploy {hostname}=.

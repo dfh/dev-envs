@@ -1,0 +1,13 @@
+* Generic WordPress development environment
+
+Used to test/develop WordPress stuff.
+
+I don't like WP much. But somehow it seems impossible to avoid it.
+
+Notes:
+
+- Database =wp-dev=, user =root= with blank password.
+- Nginx serves =/var/www/shared-folder=.
+- PHP runs as =admin:admin= so that it can write to
+  =/var/www/shared-folder=.
+- WordPress username: =admin=, password: =admin=.

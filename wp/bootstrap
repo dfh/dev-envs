@@ -1,0 +1,39 @@
+#!/usr/bin/env zsh
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <target host>";
+    cat  <<EOF
+
+Deploys initial bootstrap to Wheezy base install accessible at given
+target host. The target must be running a SSH daemon and allow logins
+via root.
+EOF
+    exit 1;
+fi
+
+echo "Deploying initial bootstrap to $1..."
+echo "---"
+
+scp ../generic-vbox-dev-login.pub $1:/tmp/dev-login.pub
+
+ssh $1 /bin/sh <<EOF
+apt-get -y install sudo zsh
+groupadd admin
+useradd -g admin -d /home/admin -s /bin/zsh admin
+usermod -G adm admin
+mkdir -p /home/admin/
+mkdir -p /home/admin/.ssh
+chown 700 /home/admin/.ssh
+cat /tmp/dev-login.pub > /home/admin/.ssh/authorized_keys
+chmod 600 /home/admin/.ssh/authorized_keys
+echo "admin ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/admin
+chown -R admin:admin /home/admin
+service sudo restart
+mkdir -p /var/www/shared-folder
+grep "shared-folder" /etc/fstab || echo "shared-folder  /var/www/shared-folder vboxsf  defaults,uid=admin,gid=admin  0  0" >> /etc/fstab
+rm /tmp/dev-login.pub
+EOF
+
+echo "---"
+echo "Done."
+

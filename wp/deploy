@@ -1,0 +1,25 @@
+#!/usr/bin/env zsh
+
+if [ "$#" -ne 1 ]; then
+  echo "Usage: $0 <target host>"
+  exit 1
+fi
+
+target=$1
+
+cd "$(dirname "$0:A")"
+
+echo "Copying files to $target..."
+echo "---"
+
+rsync -azv . $target:/tmp/deploy/
+
+echo "---"
+echo "Installing..."
+echo "---"
+
+# Runs bootstrap file as sudo through /bin/sh on target host
+ssh $target sudo /bin/sh < install.sh
+
+echo "---"
+echo "All done."
