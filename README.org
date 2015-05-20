@@ -22,6 +22,7 @@ Create and configure VirtualBox guest:
 - Add host-only network adapter as eth1 (2 adapters in total, one NAT
   and one host-only).
 - Mount installation media and install Debian 7 (Wheezy).
+- Hostname: ={env}-dev=; domain name empty.
 - Set user/pass: =root/root=, =dev/dev=.
 - Install SSH + base system.
 - Optional: remove user dev/dev: =userdel dev && rm -rf /home/dev=.
