@@ -8,8 +8,7 @@ Notes:
 - Nginx serves =/var/www/shared-folder=.
 - PHP runs as =admin:admin= so that it can write to
   =/var/www/shared-folder=.
-- WordPress username: =admin=, password: =admin=.
 - PHP =mysql.so= installed and loaded in =php.ini=.
 - PHP GD extension installed (=php5-gd=) and loaded in =php.ini=.
-- Login: david@hgbrg.se/testtest
+- PrestaShop login: =david@hgbrg.se/testtest=
 - Had to increase fastcgi buffer sizes for auth to work, see =nginx.conf=.
